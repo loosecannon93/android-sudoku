@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 public class Sudoku extends Activity implements OnClickListener {
-    /** Called when the activity is first created. */
+    private static final String TAG = "Sudoku";
+
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +30,16 @@ public class Sudoku extends Activity implements OnClickListener {
         View exitButton = findViewById(R.id.exit_button);
         exitButton.setOnClickListener(this);
     }
-
+	@Override
+	protected void onResume(){
+		super.onResume();
+		Music.play(this, R.raw.main);
+	}
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Music.stop(this);
+	}
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.continue_button:
@@ -62,8 +73,6 @@ public class Sudoku extends Activity implements OnClickListener {
 		}
 		return false;
 	}
-	private static final String TAG = "Sudoku";
-	
 	private void openNewGameDialog(){
 		new AlertDialog.Builder(this)
 			.setTitle(R.string.new_game_title)
@@ -81,13 +90,6 @@ public class Sudoku extends Activity implements OnClickListener {
 		Intent intent = new Intent(Sudoku.this, Game.class);
 		intent.putExtra(Game.KEY_DIFFICULTY, i);
 		startActivity(intent);
-	}
-		
-						
-						
-	public void onClick(DialogInterface dialog, int which) {
-		// TODO Auto-generated method stub
-		
 	}
 
 			

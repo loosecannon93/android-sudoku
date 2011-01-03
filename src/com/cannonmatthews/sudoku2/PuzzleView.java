@@ -162,24 +162,26 @@ public class PuzzleView extends View {
 			}
 		}
 		// draw the hints
-		//pick a color based on #moves left
-		Paint hint = new Paint();
-		int c[] = { getResources().getColor(R.color.puzzle_hint_0),
-					getResources().getColor(R.color.puzzle_hint_1) ,
-					getResources().getColor(R.color.puzzle_hint_2)
-		};
-		Rect r = new Rect();
-		for (int i=0; i<9; i++){
-			for (int j=0; j<9; j++){
-				int movesleft = 9 - game.getUsedTiles(i,j).length;
-				if ( movesleft <c.length){
-					getRect(i,j,r);
-					hint.setColor(c[movesleft]);
-					canvas.drawRect(r, hint);
+		if (Prefs.getHints(getContext())){
+			//pick a color based on #moves left
+			Paint hint = new Paint();
+			int c[] = { getResources().getColor(R.color.puzzle_hint_0),
+						getResources().getColor(R.color.puzzle_hint_1) ,
+						getResources().getColor(R.color.puzzle_hint_2)
+			};
+			Rect r = new Rect();
+			for (int i=0; i<9; i++){
+				for (int j=0; j<9; j++){
+					int movesleft = 9 - game.getUsedTiles(i,j).length;
+					if ( movesleft <c.length){
+						getRect(i,j,r);
+						hint.setColor(c[movesleft]);
+						canvas.drawRect(r, hint);
+					}
+						
 				}
-					
 			}
-		}
+		}// end if hints
 		// draw the selection
 		Log.d(TAG, "selRect=" + selRect);
 		Paint selected = new Paint();
