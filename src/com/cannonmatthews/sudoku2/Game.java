@@ -28,6 +28,35 @@ public class Game extends Activity {
 		"360000000004230800000004200"+
 		"070460003820000014500013020"+
 		"001900000007048300000000045";
+	public String getTileString(int x, int y) {
+		int v = getTile(x,y);
+		if (v ==0)
+			return "";
+		else
+			return String.valueOf(v);
+	}
+
+	public boolean setTileIfValid(int x, int y, int value) {
+		int tiles[] = getUsedTiles(x,y);
+		if (value !=0){
+			for ( int tile : tiles){
+				if (tile == value)
+					return false;
+			}
+		}
+		setTile(x,y,value);
+		calculateUsedTiles();
+		return true;
+	}
+
+	static protected int[] fromPuzzleString(String string){
+		int[] puz = new int[string.length()];
+		for (int i = 0; i < puz.length; i++) {
+			puz[i] = string.charAt(i) - '0';
+		}
+		return puz;
+	}
+
 	@Override 
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -40,6 +69,16 @@ public class Game extends Activity {
 		setContentView(puzzleView);
 		puzzleView.requestFocus();
 
+	}
+	@Override
+	protected void onResume(){
+		super.onResume();
+		Music.play(this, R.raw.game);
+	}
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Music.stop(this);
 	}
 	
 	protected void showKeypadOrError(int x, int y) {
@@ -65,17 +104,12 @@ public class Game extends Activity {
 		return used[x][y];
 	}
 
-	public boolean setTileIfValid(int x, int y, int value) {
-		int tiles[] = getUsedTiles(x,y);
-		if (value !=0){
-			for ( int tile : tiles){
-				if (tile == value)
-					return false;
-			}
+	static private String toPuzzleString(int[] puz){
+		StringBuilder buf = new StringBuilder();
+		for (int element : puz) {
+			buf.append(element);
 		}
-		setTile(x,y,value);
-		calculateUsedTiles();
-		return true;
+		return buf.toString();
 	}
 
 	private void calculateUsedTiles() {
@@ -148,21 +182,7 @@ public class Game extends Activity {
 		}
 		return fromPuzzleString(puz);
 	}
-	static private String toPuzzleString(int[] puz){
-		StringBuilder buf = new StringBuilder();
-		for (int element : puz) {
-			buf.append(element);
-		}
-		return buf.toString();
-	}
-	static protected int[] fromPuzzleString(String string){
-		int[] puz = new int[string.length()];
-		for (int i = 0; i < puz.length; i++) {
-			puz[i] = string.charAt(i) - '0';
-		}
-		return puz;
-	}
-   /** Return the tile at the given coordinates */
+	/** Return the tile at the given coordinates */
    private int getTile(int x, int y) {
       return puzzle[y * 9 + x];
    }
@@ -170,13 +190,6 @@ public class Game extends Activity {
    private void setTile(int x, int y, int value) {
       puzzle[y * 9 + x] = value;
    }
-	public String getTileString(int x, int y) {
-		int v = getTile(x,y);
-		if (v ==0)
-			return "";
-		else
-			return String.valueOf(v);
-	}
 
 
 	
