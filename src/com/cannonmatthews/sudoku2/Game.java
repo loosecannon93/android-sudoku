@@ -48,7 +48,8 @@ public class Game extends Activity {
 		Log.d(TAG, "got used tiles : "+ tiles);
 		if (tiles.length == 9){
 			Log.d(TAG, "showError: were 9 used tiles showing Toast");
-			Toast toast = Toast.makeText(this, R.string.no_moves_label, Toast.LENGTH_SHORT);
+			Toast toast = Toast.makeText(this,
+				R.string.no_moves_label, Toast.LENGTH_SHORT);
 			toast.setGravity(Gravity.CENTER,0,0);
 			toast.show();
 		} else {
@@ -161,12 +162,14 @@ public class Game extends Activity {
 		}
 		return puz;
 	}
-	private int getTile(int x,int y){
-		return puzzle[y *9 +x];
-	}
-	private void setTile(int x , int y, int value){
-		puzzle[ y*9 +x ]= value;
-	}
+   /** Return the tile at the given coordinates */
+   private int getTile(int x, int y) {
+      return puzzle[y * 9 + x];
+   }
+   /** Change the tile at the given coordinates */
+   private void setTile(int x, int y, int value) {
+      puzzle[y * 9 + x] = value;
+   }
 	public String getTileString(int x, int y) {
 		int v = getTile(x,y);
 		if (v ==0)
