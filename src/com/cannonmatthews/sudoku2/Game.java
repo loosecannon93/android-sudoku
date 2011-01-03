@@ -9,6 +9,9 @@ import android.widget.Toast;
 
 public class Game extends Activity {
 	private static final String TAG = "Sudoku";
+	private static final String PREF_PUZZLE = "puzzle";
+	protected static final int DIFFICULTY_CONTINUE = -1;
+
 	public static final String KEY_DIFFICULTY = "com.cannonmatthews.sudoku.difficulty";
 	public static final int DIFFICULTY_EASY = 0;
 	public static final int DIFFICULTY_MEDIUM = 1;
@@ -62,6 +65,7 @@ public class Game extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate");
 		int diff = getIntent().getIntExtra(KEY_DIFFICULTY, DIFFICULTY_EASY);
+		getIntent().putExtra(KEY_DIFFICULTY, DIFFICULTY_CONTINUE);
 		puzzle = getPuzzle(diff);
 		calculateUsedTiles();
 		
@@ -78,7 +82,12 @@ public class Game extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		Log.d(TAG, "onPause");
 		Music.stop(this);
+		//save the current puzzle
+		Log.d(TAG, "saving puzzle into prefrences; puzzle =" + toPuzzleString(puzzle));
+		getPreferences(MODE_PRIVATE).edit().putString(PREF_PUZZLE, 
+				toPuzzleString(puzzle)).commit();
 	}
 	
 	protected void showKeypadOrError(int x, int y) {
@@ -169,6 +178,10 @@ public class Game extends Activity {
 		String puz;
 		//TODO: continue last game;
 		switch(diff){
+		case DIFFICULTY_CONTINUE:
+			puz = getPreferences(MODE_PRIVATE).getString(PREF_PUZZLE, easyPuzzle);
+			Log.d(TAG, "retruving puzzle == easy puzzle :" + (puz == easyPuzzle));
+			break;
 		case DIFFICULTY_HARD:
 			puz = hardPuzzle;
 			break;
